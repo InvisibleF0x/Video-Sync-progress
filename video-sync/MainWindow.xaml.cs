@@ -43,10 +43,40 @@ namespace video_sync
             Grid.SetColumn(folderTableR, 3); // Second column
         }
 
-        void TrackAdd()
+        void TrackAdd(object sender, RoutedEventArgs e)
         {
-            TableElement tableElement = (TableElement)folderTableL.ListOfChildren.SelectedItem;
-            folderTableR.AddChild(tableElement);
+            TableElement selectedElement = (TableElement)folderTableL.ListOfChildren.SelectedItem;
+            if (selectedElement != null && !ContainsVideo(selectedElement.FilePath))
+            {
+                TableElement clonedChild = selectedElement.Clone();
+                folderTableR.AddChild(clonedChild);
+                uniqueFilePaths.Add(clonedChild.FilePath);
+            }
         }
+
+        void TrackRemove(object sender, RoutedEventArgs e)
+        {
+            TableElement selectedElement = (TableElement)folderTableR.ListOfChildren.SelectedItem;
+
+            // Check if the selected item belongs to folderTableR
+            if (folderTableR.ListOfChildren.Items.Contains(selectedElement))
+            {
+                uniqueFilePaths.Remove(selectedElement.FilePath);
+                folderTableR.RemoveChild(selectedElement);
+                int i = 1;
+                foreach (TableElement item in folderTableR.ListOfChildren.Items)
+                {
+                    item.Nr = i;
+                    i++;
+                }
+            }
+        }
+
+            List<string> uniqueFilePaths = new List<string>();
+        public bool ContainsVideo(string videoPath)
+        {
+            return uniqueFilePaths.Contains(videoPath);
+        }
+
     }
 }
