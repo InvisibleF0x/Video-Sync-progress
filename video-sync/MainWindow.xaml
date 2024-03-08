@@ -1,0 +1,32 @@
+﻿<Window x:Class="video_sync.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:video_sync"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="1000">
+    <Grid x:Name="mainGrid" Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>     <!-- row for navigation ? -->
+            <RowDefinition Height="300"></RowDefinition>    <!-- row for tables and managing them -->
+            <RowDefinition Height="150"></RowDefinition>    <!-- row for connection and play button -->
+            <RowDefinition Height="auto"></RowDefinition>   
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="119"/>
+            <ColumnDefinition Width="331"/>                 <!-- table L here -->
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="331"/>                 <!-- table P here -->
+            <ColumnDefinition Width="119"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="1" Grid.Column="2">                 <!-- Grid with moving buttons L P -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"></ColumnDefinition>
+                <ColumnDefinition Width="50"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Click="TrackRemove" Grid.Column="0" Width="45" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center">&lt;--</Button>
+            <Button Click="TrackAdd"  Grid.Column="1" Width="45" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center">--&gt;</Button>
+        </Grid>
+    </Grid>
+</Window>

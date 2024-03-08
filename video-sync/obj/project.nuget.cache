@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "9iIzvRp36pok0GuPLqLI0MG0VDNHqydfkAsY2FZNQMgBXKX29snCck8ECjLKI5Mgs/RoWYZ0Cpu3vo1qURBInA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\domin\\Source\\Repos\\InvisibleF0x\\Video-Sync-progress\\video-sync\\video-sync.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\domin\\.nuget\\packages\\xffmpeg.net\\7.2.0\\xffmpeg.net.7.2.0.nupkg.sha512"
+  ],
+  "logs": []
+}
