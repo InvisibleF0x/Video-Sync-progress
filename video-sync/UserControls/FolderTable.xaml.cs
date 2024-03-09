@@ -8,6 +8,7 @@ using FFmpeg.NET.Events;
 using System.Linq;
 using System.Windows;
 using System.Windows.Markup;
+using System.Collections.Generic;
 
 namespace video_sync.UserControls
 {
@@ -25,30 +26,20 @@ namespace video_sync.UserControls
             Application.Current.Exit += OnApplicationExit;
         }
 
-        async void OnApplicationExit(object sender, ExitEventArgs e)
-        { 
+        async void OnApplicationExit(object sender, ExitEventArgs e) // Delete the temporary directory and its contents
+        {
             if (Directory.Exists(temporaryImagesDirectory))
             {
-                Directory.Delete(temporaryImagesDirectory, true); // Delete the temporary directory and its contents
+                Directory.Delete(temporaryImagesDirectory, true); 
             }
         }
 
-        public void AddChildAdapter()
+        public void AddChildAdapter() //allows MainWindow To call AddChild
         {
             AddChild();
         }
 
-        public void AddChild(TableElement tableElement)
-        {
-            tableElement.Nr = ListOfChildren.Items.Count + 1;
-            ListOfChildren.Items.Add(tableElement);
-        }
-
-        public void RemoveChild(TableElement tableElement)
-        {
-            ListOfChildren.Items.Remove(tableElement);
-        }
-
+        ///////////////////////////////////////////////////////////////////////// Generation of tracks from folder
         async void AddChild()
         {
             string directoryPath = @"../../../Videos"; // path to videos
@@ -120,6 +111,67 @@ namespace video_sync.UserControls
             var tempPath = Path.Combine(Path.GetTempPath(), "video_sync_temp_images");
             Directory.CreateDirectory(tempPath); // Ensure the temporary folder exists
             return Path.Combine(tempPath, Path.ChangeExtension(Path.GetFileName(videoFile), ".jpg"));
+        }
+        ///////////////////////////////////////////////////////////////////////// Track moving and removing logic
+        List<string> uniqueFilePaths = new List<string>(); //List of IDs
+
+        public void AddChild(TableElement tableElement)
+        {
+            if (tableElement.FilePath != null && !ContainsVideo(tableElement.FilePath))
+            {
+                TableElement clonedChild = tableElement.Clone();
+                clonedChild.Nr = ListOfChildren.Items.Count + 1;
+                ListOfChildren.Items.Add(clonedChild);
+                uniqueFilePaths.Add(clonedChild.FilePath);
+            }
+        }
+
+        public void RemoveChild(TableElement tableElement)
+        {
+            if (ListOfChildren.Items.Contains(tableElement))
+            {
+                uniqueFilePaths.Remove(tableElement.FilePath);
+                ListOfChildren.Items.Remove(tableElement);
+                Reenumerate();
+            }
+        }
+
+        public void Reenumerate()
+        {
+            int i = 1;
+            foreach (TableElement item in ListOfChildren.Items)
+            {
+                item.Nr = i;
+                i++;
+            }
+        }
+
+        bool ContainsVideo(string videoPath)
+        {
+            return uniqueFilePaths.Contains(videoPath);
+        }
+        ///////////////////////////////////////////////////////////////////////// Track Swapping Logic
+        public void SwapUp(TableElement selectedItem)
+        {
+            int selectedIndex = ListOfChildren.Items.IndexOf(selectedItem);
+            if (selectedIndex > 0 && selectedIndex < ListOfChildren.Items.Count)
+            {
+                ListOfChildren.Items.RemoveAt(selectedIndex);
+                ListOfChildren.Items.Insert(selectedIndex - 1, selectedItem);
+                Reenumerate();
+            }
+        }
+
+        public void SwapDown(TableElement selectedItem)
+        {
+            int selectedIndex = ListOfChildren.Items.IndexOf(selectedItem);
+            if (selectedIndex >= 0 && selectedIndex < ListOfChildren.Items.Count - 1)
+            {
+                var itemBelow = (TableElement)ListOfChildren.Items[selectedIndex + 1];
+                ListOfChildren.Items.RemoveAt(selectedIndex + 1);
+                ListOfChildren.Items.Insert(selectedIndex, itemBelow);
+                Reenumerate();
+            }
         }
 
     }

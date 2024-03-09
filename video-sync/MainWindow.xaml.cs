@@ -46,37 +46,21 @@ namespace video_sync
         void TrackAdd(object sender, RoutedEventArgs e)
         {
             TableElement selectedElement = (TableElement)folderTableL.ListOfChildren.SelectedItem;
-            if (selectedElement != null && !ContainsVideo(selectedElement.FilePath))
-            {
-                TableElement clonedChild = selectedElement.Clone();
-                folderTableR.AddChild(clonedChild);
-                uniqueFilePaths.Add(clonedChild.FilePath);
-            }
+            folderTableR.AddChild(selectedElement);
         }
 
         void TrackRemove(object sender, RoutedEventArgs e)
         {
-            TableElement selectedElement = (TableElement)folderTableR.ListOfChildren.SelectedItem;
-
-            // Check if the selected item belongs to folderTableR
-            if (folderTableR.ListOfChildren.Items.Contains(selectedElement))
-            {
-                uniqueFilePaths.Remove(selectedElement.FilePath);
-                folderTableR.RemoveChild(selectedElement);
-                int i = 1;
-                foreach (TableElement item in folderTableR.ListOfChildren.Items)
-                {
-                    item.Nr = i;
-                    i++;
-                }
-            }
+            folderTableR.RemoveChild((TableElement)folderTableR.ListOfChildren.SelectedItem);
         }
 
-            List<string> uniqueFilePaths = new List<string>();
-        public bool ContainsVideo(string videoPath)
+        void SwapUp(object sender, RoutedEventArgs e)
         {
-            return uniqueFilePaths.Contains(videoPath);
+            folderTableR.SwapUp((TableElement)folderTableR.ListOfChildren.SelectedItem);
         }
-
+        void SwapDown(object sender, RoutedEventArgs e)
+        {
+            folderTableR.SwapDown((TableElement)folderTableR.ListOfChildren.SelectedItem);
+        }
     }
 }

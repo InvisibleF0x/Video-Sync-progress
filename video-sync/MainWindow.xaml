@@ -28,5 +28,13 @@
             <Button Click="TrackRemove" Grid.Column="0" Width="45" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center">&lt;--</Button>
             <Button Click="TrackAdd"  Grid.Column="1" Width="45" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center">--&gt;</Button>
         </Grid>
+        <Grid Grid.Row="1" Grid.Column="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="150"/>
+            </Grid.RowDefinitions>
+            <Button Click="SwapUp" Content="↑" Grid.Row="0" Width="20" Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+            <Button Click="SwapDown" Content="↓" Grid.Row="1" Width="20" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+        </Grid>
     </Grid>
 </Window>

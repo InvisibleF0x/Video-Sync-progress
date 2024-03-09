@@ -15,8 +15,8 @@ This is creations stage of the app, during this time I will mainly focus on crea
 
 # Plan for stage one:
 1. demo playlist ui
-2. ability to add/remove form playlist, open folder       <-- current sub-stage
-3. ability to change the order of the playlist
+2. ability to add/remove form playlist, open folder       
+3. ability to change the order of the playlist          <-- we are here
 4. ability to play selected playlist in mp4
 5. add mkv and vlc
 6. ability to select subtitles and audio path
