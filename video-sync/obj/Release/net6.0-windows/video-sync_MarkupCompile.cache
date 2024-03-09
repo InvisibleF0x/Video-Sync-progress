@@ -10,11 +10,11 @@ none
 false
 TRACE;RELEASE;NET;NET6_0;NETCOREAPP
 C:\Users\domin\Source\Repos\InvisibleF0x\Video-Sync-progress\video-sync\App.xaml
-4985399168
+41598617799
 
-5-1421957608
+6-1554268334
 195-1390040511
-MainWindow.xaml;UserControl1.xaml;UserControls\FolderTable.xaml;UserControls\TableElement.xaml;
+MainWindow.xaml;PlayerWindow.xaml;UserControls\FolderTable.xaml;UserControls\TableElement.xaml;
 
 True
 

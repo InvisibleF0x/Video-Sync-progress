@@ -21,3 +21,5 @@ This is creations stage of the app, during this time I will mainly focus on crea
 4. ability to play selected playlist in mp4
 5. add mkv and vlc
 6. ability to select subtitles and audio path
+
+# Icons downloaded from icon-icons.com

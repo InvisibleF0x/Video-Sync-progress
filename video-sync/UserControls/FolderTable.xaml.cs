@@ -44,11 +44,16 @@ namespace video_sync.UserControls
         {
             string directoryPath = @"../../../Videos"; // path to videos
             string[] videoFiles = Directory.GetFiles(directoryPath, "*.mp4"); // allowed extensions
+
             foreach (string videoFile in videoFiles)
             {
                 string previewImagePath = await ExtractPreviewImageAsync(videoFile);
                 string duration = await GetVideoDurationAsync(videoFile);
-                TableElement tableElement = new TableElement(videoFile, ListOfChildren.Items.Count + 1, Path.GetFileNameWithoutExtension(videoFile), duration, previewImagePath, true);
+
+                // Convert the relative file path to an absolute file path
+                string absoluteFilePath = Path.GetFullPath(videoFile);
+
+                TableElement tableElement = new TableElement(absoluteFilePath, ListOfChildren.Items.Count + 1, Path.GetFileNameWithoutExtension(videoFile), duration, previewImagePath, true);
                 ListOfChildren.Items.Add(tableElement);
             }
         }

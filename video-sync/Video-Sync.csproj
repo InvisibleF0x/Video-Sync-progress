@@ -12,4 +12,8 @@
     <PackageReference Include="xFFmpeg.NET" Version="7.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Icons\" />
+  </ItemGroup>
+
 </Project>

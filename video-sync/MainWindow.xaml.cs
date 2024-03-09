@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +24,7 @@ namespace video_sync
     {
         public FolderTable folderTableL = new FolderTable();
         public FolderTable folderTableR = new FolderTable();
+        public PlayerWindow playerWindow;
         public MainWindow()
         {
             InitializeComponent();
@@ -61,6 +63,19 @@ namespace video_sync
         void SwapDown(object sender, RoutedEventArgs e)
         {
             folderTableR.SwapDown((TableElement)folderTableR.ListOfChildren.SelectedItem);
+        }
+
+        void Play(object sender, RoutedEventArgs e)
+        {
+            if (folderTableR.ListOfChildren.HasItems)
+            {
+                playerWindow = new PlayerWindow(this);
+                playerWindow.Show();
+            }
+            else
+            {
+                MessageBox.Show("Playlist cannot be empty !");
+            }
         }
     }
 }
