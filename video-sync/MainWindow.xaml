@@ -37,5 +37,6 @@
             <Button Click="SwapDown" Content="↓" Grid.Row="1" Width="20" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
         </Grid>
         <Button Grid.Column="3" Grid.Row="2" Content="Play the playlist" Click="Play" Margin="50" Background="Red" FontFamily="Comic Sans" FontSize="20" Foreground="DarkBlue"/>
+        <Button Grid.Column="1" Grid.Row="2" Content="Open Video Folder" Click="OpenVideoFolder" Margin="50" Background="Red" FontFamily="Comic Sans" FontSize="20" Foreground="DarkBlue"/>
     </Grid>
 </Window>

@@ -3,6 +3,6 @@
     "",
     "\\video-sync"
   ],
-  "SelectedNode": "\\video-sync\\MainWindow.xaml.cs",
+  "SelectedNode": "\\video-sync\\PlayerWindow.xaml",
   "PreviewInSolutionExplorer": false
 }

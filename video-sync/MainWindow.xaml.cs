@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -12,7 +14,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using video_sync.UserControls;
 
 namespace video_sync
@@ -24,58 +25,123 @@ namespace video_sync
     {
         public FolderTable folderTableL = new FolderTable();
         public FolderTable folderTableR = new FolderTable();
-        public PlayerWindow playerWindow;
+        public PlayerWindow? playerWindow;
+        private bool isPlayerWindowOpen = false;
         public MainWindow()
         {
             InitializeComponent();
             FillGrid();
-            folderTableL.AddChildAdapter(); //View every video in the folder on the left
+            folderTableL.AddChildAdapter(); //View every video in the folder on the left table
+            Closing += OnMainWindowClosing;
+        }
+
+        void OnMainWindowClosing(object? sender, System.ComponentModel.CancelEventArgs e) // Delete the temporary directory and its contents
+        {
+            if (isPlayerWindowOpen)
+            {
+                playerWindow.Close();
+            }
         }
 
         void FillGrid()
         {
-            // Add them to mainGrid
             mainGrid.Children.Add(folderTableL);
             mainGrid.Children.Add(folderTableR);
-
-            // Set their positions in mainGrid
-            Grid.SetRow(folderTableL, 1); // Second row
-            Grid.SetColumn(folderTableL, 1); // First column
-            Grid.SetRow(folderTableR, 1); // Second row
-            Grid.SetColumn(folderTableR, 3); // Second column
+            Grid.SetRow(folderTableL, 1);
+            Grid.SetColumn(folderTableL, 1);
+            Grid.SetRow(folderTableR, 1);
+            Grid.SetColumn(folderTableR, 3);
         }
 
         void TrackAdd(object sender, RoutedEventArgs e)
         {
-            TableElement selectedElement = (TableElement)folderTableL.ListOfChildren.SelectedItem;
-            folderTableR.AddChild(selectedElement);
+            if (!isPlayerWindowOpen)
+            {
+                TableElement selectedElement = (TableElement)folderTableL.ListOfChildren.SelectedItem;
+                folderTableR.AddChild(selectedElement);
+            }
+            else
+            {
+                MessageBox.Show("To edit playlist close the player, or use the buttons inside of it");
+            }
         }
 
         void TrackRemove(object sender, RoutedEventArgs e)
         {
-            folderTableR.RemoveChild((TableElement)folderTableR.ListOfChildren.SelectedItem);
+            if (!isPlayerWindowOpen)
+            {
+                folderTableR.RemoveChild((TableElement)folderTableR.ListOfChildren.SelectedItem);
+            }
+            else
+            {
+                MessageBox.Show("To edit playlist close the player, or use the buttons inside of it");
+            }
         }
 
-        void SwapUp(object sender, RoutedEventArgs e)
+        public void SwapUp(object sender, RoutedEventArgs e)
         {
-            folderTableR.SwapUp((TableElement)folderTableR.ListOfChildren.SelectedItem);
+            SwapUp(sender, e, this);
         }
-        void SwapDown(object sender, RoutedEventArgs e)
+
+        public void SwapUp(object sender, RoutedEventArgs e, Window? callingWindow = null)
         {
-            folderTableR.SwapDown((TableElement)folderTableR.ListOfChildren.SelectedItem);
+            if (!isPlayerWindowOpen || callingWindow == playerWindow)
+            {
+                folderTableR.SwapUp((TableElement)folderTableR.ListOfChildren.SelectedItem);
+            }
+            else
+            {
+                MessageBox.Show("To edit playlist close the player, or use the buttons inside of it");
+            }
+        }
+        public void SwapDown(object sender, RoutedEventArgs e)
+        {
+            SwapDown(sender, e, this);
+        }
+
+        public void SwapDown(object sender, RoutedEventArgs e, Window? callingWindow = null)
+        {
+            if (!isPlayerWindowOpen || callingWindow == playerWindow)
+            {
+                folderTableR.SwapDown((TableElement)folderTableR.ListOfChildren.SelectedItem);
+            }
+            else
+            {
+                if (callingWindow == playerWindow)
+                {
+                    folderTableR.ListOfChildren.SelectedIndex = playerWindow.folderTableInPlayer.ListOfChildren.SelectedIndex;
+                }
+                MessageBox.Show("To edit playlist close the player, or use the buttons inside of it");
+            }
         }
 
         void Play(object sender, RoutedEventArgs e)
         {
-            if (folderTableR.ListOfChildren.HasItems)
+            if (!isPlayerWindowOpen)
             {
-                playerWindow = new PlayerWindow(this);
-                playerWindow.Show();
+                if (folderTableR.ListOfChildren.HasItems)
+                {
+                    playerWindow = new PlayerWindow(this);
+                    playerWindow.Closed += (s, args) => isPlayerWindowOpen = false;
+                    playerWindow.Show();
+                    isPlayerWindowOpen = true;
+                }
+                else
+                {
+                    MessageBox.Show("Playlist cannot be empty !");
+                }
             }
             else
             {
-                MessageBox.Show("Playlist cannot be empty !");
+                MessageBox.Show("Player Window is already open !");
             }
+        }
+
+        void OpenVideoFolder(object sender, RoutedEventArgs e)
+        {
+            string executablePath = AppDomain.CurrentDomain.BaseDirectory;
+            string folderPath = Path.GetFullPath(Path.Combine(executablePath, @"..\..\..\Videos"));
+            Process.Start("explorer.exe",folderPath);
         }
     }
 }

@@ -18,8 +18,8 @@ This is creations stage of the app, during this time I will mainly focus on crea
 1. demo playlist ui
 2. ability to add/remove form playlist, open folder       
 3. ability to change the order of the playlist
-4. create working player interface                      <-- wip
-5. ability to play selected playlist in mp4
+4. create working player interface          
+5. ability to play selected playlist in mp4       <-- We are here
 6. ability to select subtitles and audio path
 
 # Icons downloaded from icon-icons.com

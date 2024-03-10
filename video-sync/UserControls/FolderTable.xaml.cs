@@ -179,5 +179,19 @@ namespace video_sync.UserControls
             }
         }
 
+        public FolderTable Clone()
+        {
+            FolderTable clone = new FolderTable();
+            foreach (var child in ListOfChildren.Items)
+            {
+                if (child is TableElement tableElement)
+                {
+                    TableElement clonedChild = (TableElement)tableElement.Clone();
+                    clone.ListOfChildren.Items.Add(clonedChild);
+                }
+            }
+
+            return clone;
+        }
     }
 }

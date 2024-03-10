@@ -9,11 +9,41 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="xFFmpeg.NET" Version="7.2.0" />
+    <None Remove="Icons\mute.ico" />
+    <None Remove="Icons\next.ico" />
+    <None Remove="Icons\pause.ico" />
+    <None Remove="Icons\play.ico" />
+    <None Remove="Icons\prev.ico" />
+    <None Remove="Icons\vhigh.ico" />
+    <None Remove="Icons\vlow.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Icons\" />
+    <Content Include="Icons\mute.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\next.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\pause.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\play.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\prev.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\vhigh.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\vlow.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xFFmpeg.NET" Version="7.2.0" />
   </ItemGroup>
 
 </Project>

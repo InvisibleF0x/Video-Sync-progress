@@ -6,13 +6,41 @@
         xmlns:local="clr-namespace:video_sync"
         mc:Ignorable="d"
         Title="PlayerWindow" MinWidth="854" MinHeight="564">
-    <Grid Background="Black">
+    <Grid Background="Black" x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" MinHeight="480"/>
-            <RowDefinition Height="Auto" MinHeight="40"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="400"/>
+        </Grid.ColumnDefinitions>
         <MediaElement x:Name="Player" Grid.Row="0" Stretch="Uniform" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
-        <Grid x:Name="Menu" Grid.Row="1" Background="DimGray">
+        <Grid Grid.Column="1" Grid.Row="0" x:Name="FolderTableContainer" Background="#303030">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="300"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="331"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Click="FolderTableContainerHide" Content="X" Grid.Row="0" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+            <Grid Grid.Column="2" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Click="SwapUp" Content="↑" Grid.Row="0" Width="20" Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+                <Button Click="SwapDown" Content="↓" Grid.Row="1" Width="20" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+            </Grid>
+        </Grid>
+        <TabControl x:Name="OverlayCanvas" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Opacity="0" Background="White" Mouse.MouseEnter="OverlayMouseEnter" Mouse.MouseLeave="OverlayMouseLeave" Width="100">
+            <Button Content="Restore" Click="FolderTableContainerRestore" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="1" Background="White" Width="80" Height="300"/>
+        </TabControl>
+        <Grid x:Name="Menu" Grid.Row="1" Background="DimGray" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="15"/>
                 <RowDefinition Height="25"/>
@@ -22,20 +50,31 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="Timer" Text="0:00:00/0:00:00" Grid.Column="0" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center"/>
-            <ProgressBar Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
+            <Slider x:Name="TimeSlider" Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="100" Value="0" Thumb.DragStarted="TimeSliderDragStart" ValueChanged="TimeSliderChangeValue" IsMoveToPointEnabled="True"/>
             <Grid Grid.Row="1" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
-                    <!--<ColumnDefinition Width="*"/>-->
+                    <ColumnDefinition Width="109*"/>
+                    <ColumnDefinition Width="395*"/>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="Play" Grid.Column="1" Content="Play" Width="50"/>
-                <Button x:Name="Previous" Grid.Column="2" Content="Previous" Width="50"/>
-                <Button x:Name="Next" Grid.Column="3" Content="Next" Width="50"/>
+                <Button x:Name="play" Click="Play" Grid.Column="1" Width="50">
+                    <Image x:Name="playImg" Source="/Icons/play.ico"/>
+                </Button>
+                <Button x:Name="previous" Click="Previous" Grid.Column="2" Width="50">
+                    <Image Source="/Icons/prev.ico"/>
+                </Button>
+                <Button x:Name="next" Click="Next" Grid.Column="3" Width="50">
+                    <Image Source="/Icons/next.ico"/>
+                </Button>
+                <Button x:Name="volume" Click="VolumeButtonClick" Grid.Column="6" Width="50">
+                    <Image x:Name="volumeImg" Source="/Icons/vlow.ico"/>
+                </Button>
+                <Slider x:Name="VolumeSlider" Minimum="0" Maximum="1" Value="0.1" ValueChanged="VolumeChange" Grid.Column="7" Width="80" Margin="10,0,10,0"/>
             </Grid>
         </Grid>
     </Grid>
