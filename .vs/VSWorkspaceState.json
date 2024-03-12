@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\video-sync"
+    "\\video-sync",
+    "\\video-sync\\UserControls"
   ],
-  "SelectedNode": "\\video-sync\\PlayerWindow.xaml",
+  "SelectedNode": "\\video-sync\\MainWindow.xaml.cs",
   "PreviewInSolutionExplorer": false
 }

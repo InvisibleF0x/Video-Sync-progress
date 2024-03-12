@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,10 +30,11 @@ namespace video_sync
         public FolderTable folderTableInPlayer = new FolderTable();
         private bool isPlaying = false;
         private bool isUserInteraction = true;
+        private Point previousMousePosition;
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private int currentIndex = 0;
         private double volumeCach;
         private DispatcherTimer? timer;
-        private DispatcherTimer? mouseTimer;
         public PlayerWindow(MainWindow mainWindowInstance)
         {
             InitializeComponent();
@@ -43,7 +45,7 @@ namespace video_sync
             TableElement firstItem = (TableElement)MainWindowInstance.folderTableR.ListOfChildren.Items[currentIndex];
             Player.Source = new Uri(firstItem.FilePath);
             Closing += OnWindowExit;
-            InitializeMouseTimer();
+            MouseMove += MouseDetect;
             FillGrid();
         }
 
@@ -56,8 +58,9 @@ namespace video_sync
 
         private void OnWindowExit(object? sender, System.ComponentModel.CancelEventArgs e)
         {
-            mouseTimer.Stop();
             Player.Source = null;
+            cancellationTokenSource.Cancel();
+            isPlaying = false;
         }
 
         ////////////////////////////////////////////////////////////////////////////////// timer and time slider logic
@@ -110,34 +113,46 @@ namespace video_sync
                 isPlaying = true;
             }
         }
-        // mouse timer
-        private void InitializeMouseTimer()
+
+        /////////////////////////////////////////////////////////////////////////////////// Mouse movment detection
+
+        private void MouseDetect(object sender, MouseEventArgs e)
         {
-            mouseTimer = new DispatcherTimer();
-            mouseTimer.Interval = TimeSpan.FromSeconds(5); // Set the interval to 5 seconds
-            mouseTimer.Tick += MouseTimer_Tick;
-            MouseMove += PlayerWindow_MouseMove;
-            mouseTimer.Start();
+            Point currentMousePosition = e.GetPosition(MainGrid);
+            if (currentMousePosition != previousMousePosition)
+            {
+                PlayerWindow_MouseMove(sender, e);
+                previousMousePosition = currentMousePosition;
+            }
         }
 
-        private void PlayerWindow_MouseMove(object sender, MouseEventArgs e) //if mouse moved
+        private async void PlayerWindow_MouseMove(object sender, MouseEventArgs e)
         {
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource = new CancellationTokenSource();
             RowDefinition rowDefinition = MainGrid.RowDefinitions[1];
             rowDefinition.Height = new GridLength(40);
             Mouse.OverrideCursor = null;
-            mouseTimer.Stop();
-            mouseTimer.Start();
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(4), cancellationToken);
+                if (IsPlaying())
+                {
+                    rowDefinition.Height = new GridLength(0);
+                    Mouse.OverrideCursor = Cursors.None;
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                // Task was cancelled, do nothing
+            }
         }
 
-        private void MouseTimer_Tick(object? sender, EventArgs e)  // if mouse not moved for 5s
-        {
-            RowDefinition rowDefinition = MainGrid.RowDefinitions[1];
-            rowDefinition.Height = new GridLength(0);
-            Mouse.OverrideCursor = Cursors.None;
-        }
-    /////////////////////////////////////////////////////////////////////////////////// Play, pause, ect
 
-    private bool IsPlaying()
+        /////////////////////////////////////////////////////////////////////////////////// Play, pause, ect
+
+        private bool IsPlaying()
         {
             return isPlaying;
         }
@@ -252,6 +267,7 @@ namespace video_sync
         {
             ColumnDefinition columnDefinition = MainGrid.ColumnDefinitions[1];
             columnDefinition.Width = new GridLength(0, GridUnitType.Star);
+            OverlayCanvas.Visibility = Visibility.Visible;
         }
 
         void FolderTableContainerRestore(object sender, RoutedEventArgs e)
@@ -259,6 +275,7 @@ namespace video_sync
             OverlayCanvas.Opacity = 0;
             ColumnDefinition columnDefinition = MainGrid.ColumnDefinitions[1];
             columnDefinition.Width = new GridLength(400, GridUnitType.Pixel);
+            OverlayCanvas.Visibility = Visibility.Collapsed;
         }
 
         void OverlayMouseEnter(object sender, MouseEventArgs e)
@@ -271,6 +288,14 @@ namespace video_sync
         void OverlayMouseLeave(object sender, MouseEventArgs e)
         {
             OverlayCanvas.Opacity = 0;
+        }
+
+        private void PlaySelected(object sender, RoutedEventArgs e)
+        {
+            currentIndex = folderTableInPlayer.ListOfChildren.SelectedIndex;
+            Player.Source = new Uri(FilePathGetter());
+            isPlaying = false;
+            Play(this, e);
         }
     }
 }

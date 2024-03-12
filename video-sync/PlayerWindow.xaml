@@ -15,7 +15,9 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="400"/>
         </Grid.ColumnDefinitions>
-        <MediaElement x:Name="Player" Grid.Row="0" Stretch="Uniform" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
+        <Grid MouseLeftButtonDown="Play" Grid.Row="0" Grid.Column="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
+            <MediaElement x:Name="Player" Stretch="Uniform" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
+        </Grid>
         <Grid Grid.Column="1" Grid.Row="0" x:Name="FolderTableContainer" Background="#303030">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -28,6 +30,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button Click="FolderTableContainerHide" Content="X" Grid.Row="0" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+            <Button Grid.Column="1" Grid.Row="2" Margin="30" Content="Play Selected" FontSize="22" Background="Red" FontWeight="Bold" Click="PlaySelected"/>
             <Grid Grid.Column="2" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -37,7 +40,7 @@
                 <Button Click="SwapDown" Content="↓" Grid.Row="1" Width="20" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
             </Grid>
         </Grid>
-        <TabControl x:Name="OverlayCanvas" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Opacity="0" Background="White" Mouse.MouseEnter="OverlayMouseEnter" Mouse.MouseLeave="OverlayMouseLeave" Width="100">
+        <TabControl x:Name="OverlayCanvas" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Visibility="Collapsed" Opacity="0" Background="White" Mouse.MouseEnter="OverlayMouseEnter" Mouse.MouseLeave="OverlayMouseLeave" Width="100">
             <Button Content="Restore" Click="FolderTableContainerRestore" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="1" Background="White" Width="80" Height="300"/>
         </TabControl>
         <Grid x:Name="Menu" Grid.Row="1" Background="DimGray" Grid.ColumnSpan="2">
