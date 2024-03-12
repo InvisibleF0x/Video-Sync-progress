@@ -1,11 +1,11 @@
 # YOU NEED TO DOWNLOAD FFMPEG AND UNPACK IT INSIDE video-sync FOR IT TO RUN
 # Video-Sync
 While most of video sharing apps use servers to hold the file, this app will use local storage therefore providing better bitrate and quality for users with low internet connection speed.
-This is creations stage of the app, during this time I will mainly focus on creating offline app that is capable of playing mp3 and mkv files.
+This is creations stage of the app, during this time I will mainly focus on creating offline app that is capable of playing mp4 and mkv files.
 
 
 # The rough davelopment plan looks like this:
-1. create a basic structure for offline video player with capabilieties to play mp4, vlc, mkv <-- current stage
+1. create a basic structure for offline video player with capabilieties to play mp4, mkv <-- current stage
 2. make it possible to connect via p2p
 3. make it check if the file is present on both pcs
 4. make it possible to send a file via sftp if one of the client doesn't have it
